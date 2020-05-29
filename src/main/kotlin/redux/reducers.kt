@@ -15,14 +15,16 @@ fun sortReducer(state: State, action: RAction) =
             val newList = state.drugs.toList().sortedByDescending { (_,it) -> it.price }
             State(
                 newList.toMap(),
-                state.reviews
+                state.reviews,
+                state.visibilityFilter
             )
         }
         is sortByDescending -> {
             val newList = state.drugs.toList().sortedBy{ (_,it) -> it.price }
             State(
                 newList.toMap(),
-                state.reviews
+                state.reviews,
+                state.visibilityFilter
             )
         }
         else -> state
