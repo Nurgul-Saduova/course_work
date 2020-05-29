@@ -1,7 +1,8 @@
 package components
 
+import container.filterLink
 import data.Drug
-import data.Form
+import data.VisibilityFilter
 import react.*
 import org.w3c.dom.events.Event
 import hoc.withDisplayName
@@ -17,7 +18,6 @@ import kotlin.browser.document
 
 interface DrugListProps : RProps {
     var drugs: Map<Int,Drug>
-    var forms: Array<Form>
     var add: (Event) -> Unit
     var sortByAscending: (Event) -> Unit
     var sortByDescending: (Event) -> Unit
@@ -25,7 +25,6 @@ interface DrugListProps : RProps {
 
 val fDrugList =
     functionalComponent<DrugListProps> {
-        val (form, setForm) = useState("Таблетки")
         val (search, setSearch) = useState("")
 
         div("table-title") {
@@ -47,18 +46,27 @@ val fDrugList =
             }
         }
 
-        select {
-            for (element in it.forms) {
-                attrs.id = "form"
-                option {
-                    +element.name
-                }
-                attrs.onChangeFunction = {
-                    val forms = document.getElementById("form") as HTMLSelectElement
-                    setForm(forms.value)
-                }
-            }
+        filterLink {
+            attrs.filter = VisibilityFilter.ALL
+            +"Все"
         }
+        filterLink {
+            attrs.filter = VisibilityFilter.TABLETS
+            +"Таблетки"
+        }
+        filterLink {
+            attrs.filter = VisibilityFilter.CAPSULES
+            +"Капсулы"
+        }
+        filterLink {
+            attrs.filter = VisibilityFilter.OINTMENTS
+            +"Мази"
+        }
+        filterLink {
+            attrs.filter = VisibilityFilter.SOLUTIONS
+            +"Растворы"
+        }
+
         table {
             attrs.id = "table-drugs"
             tr {
@@ -79,11 +87,9 @@ val fDrugList =
                 th { +"Дата добавления" }
             }
             it.drugs.forEach { (key, drug) ->
-                if (drug.form == form) {
                     if (drug.name.contains(search)) {
                         drug(drug, key)
                     }
-                }
             }
             div("modal") {
                 attrs.id = "myModal"
@@ -157,7 +163,6 @@ val fDrugList =
 
 fun RBuilder.drugList(
     drugs: Map<Int,Drug>,
-    forms: Array<Form>,
     add: (Event) -> Unit,
     sortByAscending: (Event) -> Unit,
     sortByDescending: (Event) -> Unit
@@ -165,7 +170,6 @@ fun RBuilder.drugList(
     withDisplayName("DrugList", fDrugList)
 ) {
     attrs.drugs = drugs
-    attrs.forms = forms
     attrs.add = add
     attrs.sortByAscending = sortByAscending
     attrs.sortByDescending = sortByDescending

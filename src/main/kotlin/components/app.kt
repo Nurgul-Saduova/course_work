@@ -3,7 +3,6 @@ package components
 import container.drugFullContainer
 import container.drugListContainer
 import data.Drug
-import data.Form
 import data.Review
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
@@ -13,7 +12,6 @@ import react.router.dom.*
 
 interface AppProps : RProps {
     var drugs: Map<Int,Drug>
-    var forms: Array<Form>
     var reviews: Array<Review>
 }
 

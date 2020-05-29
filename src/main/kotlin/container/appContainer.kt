@@ -9,7 +9,6 @@ val appContainer =
     rConnect<State, RProps, AppProps>(
         { state, _->
             drugs = state.drugs
-            forms = state.forms
             reviews = state.reviews
         },
         {

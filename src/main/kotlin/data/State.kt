@@ -3,8 +3,8 @@ package data
 
 class State(
     val drugs: Map<Int,Drug>,
-    val forms: Array<Form>,
-    var reviews: Array<Review>
+    var reviews: Array<Review>,
+    val visibilityFilter: VisibilityFilter = VisibilityFilter.ALL
 )
 
 fun <T> Map<Int, T>.newId() =
@@ -15,7 +15,6 @@ fun initialState() =
         drugList().mapIndexed { index, drug ->
             index to drug
         }.toMap(),
-        formList(),
         reviewList()
     )
 

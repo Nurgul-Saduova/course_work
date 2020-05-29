@@ -1,9 +1,6 @@
 package redux
 
-import data.Drug
-import data.Review
-import data.State
-import data.newId
+import data.*
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
@@ -18,7 +15,6 @@ fun sortReducer(state: State, action: RAction) =
             val newList = state.drugs.toList().sortedByDescending { (_,it) -> it.price }
             State(
                 newList.toMap(),
-                state.forms,
                 state.reviews
             )
         }
@@ -26,12 +22,20 @@ fun sortReducer(state: State, action: RAction) =
             val newList = state.drugs.toList().sortedBy{ (_,it) -> it.price }
             State(
                 newList.toMap(),
-                state.forms,
                 state.reviews
             )
         }
         else -> state
     }
+
+fun visibilityReducer(state: State, action: RAction) = when (action) {
+    is SetVisibilityFilter -> State(
+        state.drugs,
+        state.reviews,
+        action.filter
+    )
+    else -> state
+}
 
 fun addReducer(state: State, action: RAction, newId: Int = -1) =
     when (action) {
@@ -67,7 +71,6 @@ fun addReducer(state: State, action: RAction, newId: Int = -1) =
             desc.value = ""
             State(
                 newDrugs,
-                state.forms,
                 state.reviews
             )
         }
@@ -79,7 +82,6 @@ fun addReducer(state: State, action: RAction, newId: Int = -1) =
             console.log(state.reviews)
             State(
                 state.drugs,
-                state.forms,
                 newReviews
             )
         }
@@ -101,6 +103,9 @@ fun rootReducer(state: State, action: RAction) =
         }
         is sortByDescending -> {
             sortReducer(state,action)
+        }
+        is SetVisibilityFilter -> {
+            visibilityReducer(state,action)
         }
         else -> state
     }

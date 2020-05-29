@@ -16,9 +16,19 @@ interface DrugListDispatchProps : RProps {
 }
 
 interface DrugListStateProps : RProps {
-    var drugs: Map<Int,Drug>
-    var forms: Array<Form>
+    var drugs: Map<Int, Drug>
 }
+
+
+private fun getVisibilityDrugs(drugs: Map<Int, Drug>, filter: VisibilityFilter): Map<Int, Drug> =
+    when (filter) {
+        VisibilityFilter.ALL -> drugs
+        VisibilityFilter.TABLETS -> drugs.filter { it.value.form == "Таблетки" }
+        VisibilityFilter.CAPSULES -> drugs.filter { it.value.form == "Капсулы" }
+        VisibilityFilter.OINTMENTS -> drugs.filter { it.value.form == "Мази" }
+        VisibilityFilter.SOLUTIONS -> drugs.filter { it.value.form == "Растворы" }
+    }
+
 
 val drugListHoc =
     rConnect<
@@ -31,13 +41,12 @@ val drugListHoc =
             DrugListProps
             >(
         mapStateToProps = { state, _ ->
-            drugs = state.drugs
-            forms = state.forms
+            drugs = getVisibilityDrugs(state.drugs,state.visibilityFilter)
         },
         mapDispatchToProps = { dispatch, _ ->
-            add = {dispatch(AddDrug())}
-            sortByAscending = {dispatch(sortByAscending())}
-            sortByDescending = {dispatch(sortByDescending())}
+            add = { dispatch(AddDrug()) }
+            sortByAscending = { dispatch(sortByAscending()) }
+            sortByDescending = { dispatch(sortByDescending()) }
         }
     )
 
