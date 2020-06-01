@@ -5,5 +5,7 @@ enum class VisibilityFilter {
     TABLETS,
     CAPSULES,
     OINTMENTS,
-    SOLUTIONS
+    SOLUTIONS,
+    DROPS,
+    GOODS_FOR_KIDS
 }

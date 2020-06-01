@@ -27,6 +27,8 @@ private fun getVisibilityDrugs(drugs: Map<Int, Drug>, filter: VisibilityFilter):
         VisibilityFilter.CAPSULES -> drugs.filter { it.value.form == "Капсулы" }
         VisibilityFilter.OINTMENTS -> drugs.filter { it.value.form == "Мази" }
         VisibilityFilter.SOLUTIONS -> drugs.filter { it.value.form == "Растворы" }
+        VisibilityFilter.DROPS -> drugs.filter { it.value.form == "Капли" }
+        VisibilityFilter.GOODS_FOR_KIDS -> drugs.filter { it.value.form == "Товары для детей" }
     }
 
 

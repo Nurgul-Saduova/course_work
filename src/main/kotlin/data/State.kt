@@ -1,8 +1,9 @@
 package data
 
+typealias DrugState = Map<Int, Drug>
 
 class State(
-    val drugs: Map<Int,Drug>,
+    val drugs: DrugState,
     var reviews: Array<Review>,
     val visibilityFilter: VisibilityFilter = VisibilityFilter.ALL
 )
@@ -12,9 +13,7 @@ fun <T> Map<Int, T>.newId() =
 
 fun initialState() =
     State(
-        drugList().mapIndexed { index, drug ->
-            index to drug
-        }.toMap(),
+        drugList,
         reviewList()
     )
 

@@ -67,7 +67,14 @@ val fDrugList =
             attrs.filter = VisibilityFilter.SOLUTIONS
             +"Растворы"
         }
-
+        filterLink {
+            attrs.filter = VisibilityFilter.DROPS
+            +"Капли"
+        }
+        filterLink {
+            attrs.filter = VisibilityFilter.GOODS_FOR_KIDS
+            +"Товары для детей"
+        }
         table {
             attrs.id = "table-drugs"
             tr {
@@ -85,7 +92,6 @@ val fDrugList =
                         attrs.onClickFunction = it.sortByDescending
                     }
                 }
-                th { +"Дата добавления" }
             }
             it.drugs.forEach { (key, drug) ->
                     if (drug.name.contains(search)) {
@@ -143,10 +149,6 @@ val fDrugList =
                                 val image = document.getElementById("image") as HTMLInputElement
                                 val price = document.getElementById("price") as HTMLInputElement
                                 val desc = document.getElementById("desc") as HTMLInputElement
-                                val day = Date().getDate()
-                                val month = Date().getMonth() + 1
-                                val year = Date().getFullYear()
-                                val date = "${day}.${month}.${year}"
                                 it.addDrug(
                                     Drug(
                                         name.value,
@@ -154,8 +156,7 @@ val fDrugList =
                                         image.value,
                                         price.value.toInt(),
                                         desc.value,
-                                        formName.value,
-                                        date
+                                        formName.value
                                     )
                                 )
                                 modal.style.display = "none"

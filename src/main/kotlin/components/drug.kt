@@ -22,7 +22,6 @@ val fDrug =
             td { +it.drug.form }
             td { +"${it.drug.quantity}" }
             td { +"${it.drug.price}" }
-            td { +"${it.drug.date}" }
         }
     }
 
