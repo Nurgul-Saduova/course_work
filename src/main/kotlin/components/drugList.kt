@@ -15,12 +15,13 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import react.dom.*
 import kotlin.browser.document
+import kotlin.js.Date
 
 interface DrugListProps : RProps {
     var drugs: Map<Int,Drug>
-    var add: (Event) -> Unit
     var sortByAscending: (Event) -> Unit
     var sortByDescending: (Event) -> Unit
+    var addDrug: (Drug) -> Unit
 }
 
 val fDrugList =
@@ -134,11 +135,41 @@ val fDrugList =
                         }
                         button(classes = "submit-btn") {
                             +"Добавить"
-                            attrs.onClickFunction = it.add
+                            attrs.onClickFunction = {_:Event->
+                                val modal = document.getElementById("myModal") as HTMLElement
+                                val name = document.getElementById("name") as HTMLInputElement
+                                val formName = document.getElementById("formName") as HTMLInputElement
+                                val quantity = document.getElementById("quantity") as HTMLInputElement
+                                val image = document.getElementById("image") as HTMLInputElement
+                                val price = document.getElementById("price") as HTMLInputElement
+                                val desc = document.getElementById("desc") as HTMLInputElement
+                                val day = Date().getDate()
+                                val month = Date().getMonth() + 1
+                                val year = Date().getFullYear()
+                                val date = "${day}.${month}.${year}"
+                                it.addDrug(
+                                    Drug(
+                                        name.value,
+                                        quantity.value.toInt(),
+                                        image.value,
+                                        price.value.toInt(),
+                                        desc.value,
+                                        formName.value,
+                                        date
+                                    )
+                                )
+                                modal.style.display = "none"
+                                name.value = ""
+                                formName.value = ""
+                                quantity.value = ""
+                                image.value = ""
+                                price.value = ""
+                                desc.value = ""
+                            }
                         }
                         button(classes = "submit-btn") {
                             +"Закрыть"
-                            attrs.onClickFunction = {
+                            attrs.onClickFunction = {_:Event->
                                 val modal = document.getElementById("myModal") as HTMLElement
                                 val name = document.getElementById("name") as HTMLInputElement
                                 val formName = document.getElementById("formName") as HTMLInputElement
@@ -159,18 +190,19 @@ val fDrugList =
                 }
             }
         }
+
     }
 
 fun RBuilder.drugList(
     drugs: Map<Int,Drug>,
-    add: (Event) -> Unit,
     sortByAscending: (Event) -> Unit,
-    sortByDescending: (Event) -> Unit
+    sortByDescending: (Event) -> Unit,
+    addDrug: (Drug) -> Unit
 ) = child(
     withDisplayName("DrugList", fDrugList)
 ) {
     attrs.drugs = drugs
-    attrs.add = add
     attrs.sortByAscending = sortByAscending
     attrs.sortByDescending = sortByDescending
+    attrs.addDrug = addDrug
 }

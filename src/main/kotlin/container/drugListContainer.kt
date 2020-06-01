@@ -10,9 +10,9 @@ import react.redux.rConnect
 import redux.*
 
 interface DrugListDispatchProps : RProps {
-    var add: (Event) -> Unit
     var sortByAscending: (Event) -> Unit
     var sortByDescending: (Event) -> Unit
+    var addDrug: (Drug) -> Unit
 }
 
 interface DrugListStateProps : RProps {
@@ -44,9 +44,10 @@ val drugListHoc =
             drugs = getVisibilityDrugs(state.drugs,state.visibilityFilter)
         },
         mapDispatchToProps = { dispatch, _ ->
-            add = { dispatch(AddDrug()) }
+            addDrug = { dispatch(AddDrug(it)) }
             sortByAscending = { dispatch(sortByAscending()) }
             sortByDescending = { dispatch(sortByDescending()) }
+
         }
     )
 

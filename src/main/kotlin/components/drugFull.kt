@@ -8,6 +8,7 @@ import kotlinx.html.InputType
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
 import react.dom.*
 import kotlin.browser.document
@@ -17,7 +18,7 @@ interface DrugFullProps : RProps {
     var index: Int
     var drugs: Map<Int,Drug>
     var reviews: Array<Review>
-    var add: (Int) -> (Event) -> (Unit)
+    var addReview: (Review) -> (Unit)
 }
 
 val fDrugFull =
@@ -47,7 +48,12 @@ val fDrugFull =
                     }
                     button(classes = "review-btn") {
                         +"Добавить отзыв"
-                        attrs.onClickFunction = it.add(it.index)
+                        attrs.onClickFunction = {_:Event ->
+                            val author = document.getElementById("author") as HTMLInputElement
+                            val text = document.getElementById("review-text") as HTMLInputElement
+                            val newReview = Review(it.index, author.value, text.value)
+                            it.addReview(newReview)
+                        }
                     }
                     it.reviews.mapIndexed { _, review ->
                         if(review.drug == it.index) {
@@ -64,12 +70,12 @@ fun RBuilder.fullDrugs(
     index: Int,
     drugs: Map<Int,Drug>,
     reviews: Array<Review>,
-    add: (Int) -> (Event) -> (Unit)
+    addReview:  (Review) -> (Unit)
 ) = child(
     withDisplayName("DrugFull", fDrugFull)
 ) {
     attrs.index = index
     attrs.drugs = drugs
     attrs.reviews = reviews
-    attrs.add = add
+    attrs.addReview = addReview
 }

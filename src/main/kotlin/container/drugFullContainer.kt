@@ -10,7 +10,7 @@ import react.redux.rConnect
 import redux.*
 
 interface DrugFullDispatchProps : RProps {
-    var add: (Int)->(Event) -> Unit
+    var addReview: (Review) -> Unit
 }
 
 interface DrugFullStateProps: RProps {
@@ -37,12 +37,7 @@ val drugFullHoc =
             reviews = state.reviews
         },
         mapDispatchToProps = { dispatch, _ ->
-            add =
-                { index ->
-                    {
-                        dispatch(AddReview(index))
-                    }
-                }
+            addReview = { dispatch(AddReview(it)) }
         }
     )
 
