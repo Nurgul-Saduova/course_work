@@ -16,7 +16,8 @@ interface LinkProps : RProps {
 class Link(props: LinkProps) : RComponent<LinkProps, RState>(props) {
     override fun RBuilder.render() {
         button {
-            attrs.onClickFunction = { props.onClick() }
+            attrs.onClickFunction = props.onClick() 
+            attrs.disabled = it.active
             children()
         }
     }
